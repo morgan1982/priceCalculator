@@ -1,9 +1,20 @@
 const electron = require('electron');
+const contextMenu = require('electron-context-menu');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
 const path = require('path');
 const isDev = require('electron-is-dev');
+
+contextMenu({
+    prepend: (defaultActions, params, browserWindow) => [
+        {
+            label: 'Rainbow',
+            visible: params.mediaType === 'image'
+        },
+    ],
+    showInspectElement: true
+})
 
 let mainWindow;
 
