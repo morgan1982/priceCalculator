@@ -1,12 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 
 import PriceInput from "./PriceInput";
-import IosSwitch from '../Ui/iosSwitch';
+import Controls from './Controls';
 
 const useStyles = makeStyles(theme => ({
   root: {
 
+  },
+  mainContainer: {
+    display: 'flex'
+  },
+  inputs: {
+    width: '350px'
   },
   totalContainer: {
     display: 'flex',
@@ -40,44 +46,56 @@ const WithLabel = ({ classes, value, children }) => {
   )
 }
 
+const refFactory = numOfRefs => {
+  const arrOfRefs = []
+  for (let i=1; i<=numOfRefs; i++) {
+    arrOfRefs.push(React.createRef())
+  }
+  return arrOfRefs;
+}
+
 
 const PriceCalculator = props => {
-  const [price, setPrice] = useState({});
+  const [values, setValues] = useState({});
+  const [prices, setPrices] = useState({})
   const [inputs, setInputs] = useState([1, 2, 3, 4])
   const [lc, setLc] = useState(false)
+  const [nr, setNr] = useState(false)
   const classes = useStyles();
+  const inputRefs = useRef(refFactory(5));
 
   useEffect(() => {
-    // set the final price
-    if (lc) {
-      const lcPrice = Object.values(price);
-      const newPrice = lcPrice.map(el => el * 0.9);
-      console.log(lcPrice)
-      console.log(newPrice);
-    }
-  }, [price, lc]);
+    inputRefs.current[1].current.focus()
+  }, [])
 
-  const handleChange = name => ({ target: { value } }) => {
-    let id = parseInt(name);
-    let cost  = parseInt(value);
+  useEffect(() => {
+    // calculates the discounts
+    let copyOfObj = Object.assign({}, values);
+    inputs.map(id => {
+      let price;
+      if (copyOfObj[id] !== undefined) {
+        price = Number(copyOfObj[id])
+        if (lc) {
+          price = price * 0.9;
+        }
+        if (nr) {
+          price = price / 1.24;
+        }
+        if (id === 2) {
+          price = price / 2
+        } else if (id > 2) {
+          price = price * 0.25
+        }
+        copyOfObj[id] = price
+      }
+    })
+    setPrices(copyOfObj)
+  }, [values, lc, nr]);
 
-    if (isNaN(cost)) {
-        setPrice({
-            ...price,
-            [name]: 0
-        })
-        return;    
-    }
-
-    if (id === 2) {
-        cost = cost / 2;
-    } else if (id > 2) {
-        cost = cost * 0.25
-    }
-
-    setPrice({
-      ...price,
-      [name]: cost
+  const handleChange = index => ({ target: { value } }) => {
+    setValues({
+      ...values,
+      [index]: value
     });
   };
 
@@ -85,32 +103,73 @@ const PriceCalculator = props => {
     setLc(!lc);
   }
 
+  const handleNr = () => {
+    setNr(!nr);
+  }
+
+  const handleKeyPress = id => ({ key }) => {
+    if(key === 'Enter') {
+      if (inputRefs.current[id+1] !== undefined) {
+        inputRefs.current[id + 1].current.focus();
+      } else {
+        inputRefs.current[1].current.focus();
+      }
+    }
+  }
+
+  const clearValues = () => {
+    setValues([])
+  }
+
+  // total calculation
   const renderSum = () => {
-    const sum = Object.values(price).reduce((sum, val) => sum + val, 0)
+    let sum = Object.values(prices).reduce((sum, val) => sum + Number(val), 0)
+    if (Math.round(sum) !== sum) {
+      sum = sum.toFixed(3)
+    }
     return (
       <div className={ classes.totalContainer }>
         <div>Total</div>
-        <div className={ classes.total }>{ sum } </div>
+        <div className={ classes.total }>{sum}</div>
       </div>
     ) 
   }
 
   const renderInputs = () => {
-    return inputs.map(id => (
-      <WithLabel key={id} classes={ classes.inputContainer } value={price[id]}>
-        <PriceInput id={id} onChange={handleChange} label={`Repair ${id}`}/>
+    return inputs.map(id => {
+      let value = prices[id];
+      if (prices[id] !== undefined && (Math.round(prices[id]) !== prices[id])) {
+        value = prices[id].toFixed(3);
+      }
+    
+      return(
+      <WithLabel key={id} classes={ classes.inputContainer } value={value}>
+        <PriceInput
+          value={ values[id] === undefined || values[id] === 0 ? '' : values[id] }
+          ref={inputRefs.current[id]}
+          id={id} 
+          onKeyPress={handleKeyPress(id)}
+          onChange={handleChange(id)} 
+          label={`Repair ${id}`}/>
       </WithLabel>    
-    ))
+    )} )
   }
 
   return (
     <div>
       {renderSum()}
-      {renderInputs()}
-      <IosSwitch
-        onChange={handleLc}
-        checked={lc}
-      />
+      <div className={classes.mainContainer}>
+        <div className={classes.inputs}>
+          {renderInputs()}
+        </div>
+        <Controls
+          handleNr={handleNr}
+          handleLc={handleLc}
+          nr={nr}
+          lc={lc}
+          clear={clearValues}
+        />
+      </div>
     </div>
   );
 };
