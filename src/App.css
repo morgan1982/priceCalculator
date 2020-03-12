@@ -45,3 +45,12 @@ h3 {
     transform: rotate(360deg);
   }
 }
+
+.basic__flex {
+  display: flex;
+  align-items: baseline;
+}
+
+.basic__flex h6 {
+  margin-left: 10px;
+}

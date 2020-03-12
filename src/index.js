@@ -6,7 +6,7 @@ import * as serviceWorker from './serviceWorker';
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline'
-import { orange } from '@material-ui/core/colors'
+import { deepOrange, red } from '@material-ui/core/colors'
 
 const theme = createMuiTheme({
   typography: {
@@ -14,11 +14,14 @@ const theme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: orange[500]
+      main: deepOrange[500]
+    },
+    secondary: {
+      main: red[900]
     }
   },
   status: {
-    danger: orange[500]
+    danger: deepOrange[500]
   },
   switch: {
     root: {
@@ -58,6 +61,13 @@ const theme = createMuiTheme({
     switchBase: {
       transform: {
         small: '14px'
+      }
+    }
+  },
+  overrides: {
+    MuiTypography: {
+      root: {
+        color: '#666'
       }
     }
   }

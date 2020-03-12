@@ -56,6 +56,7 @@ const IOSSwitch = withStyles(theme => ({
 }))(({ classes, ...props }) => {
   return (
     <Switch
+      disabled={props.disabled}
       focusVisibleClassName={ classes.focusVisible }
       disableRipple
       classes={{
