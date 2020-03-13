@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import isEmpty from "../utils/isEmpty";
-import clsx from 'clsx';
+import clsx from "clsx";
 
+import WithLabel from '../Ui/WithLabel';
+import Typography from "@material-ui/core/Typography";
 import PriceInput from "./PriceInput";
 import Controls from "./Controls/Controls";
-import { pink, grey } from "@material-ui/core/colors";
+import { grey } from "@material-ui/core/colors";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,14 +20,14 @@ const useStyles = makeStyles(theme => ({
     width: "350px"
   },
   totalOfTotalContainer: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    marginBottom: '40px'
+    display: "flex",
+    justifyContent: "flex-end",
+    marginBottom: "40px"
   },
   totalContainer: {
     width: 350,
     display: "flex",
-    alignItems: "center",
+    alignItems: "baseline",
     "& div:nth-child(1)": {
       fontSize: "1.8rem",
       color: "#555",
@@ -33,10 +35,12 @@ const useStyles = makeStyles(theme => ({
     }
   },
   total: {
-    fontFamily: "'Spartan', sans-serif",
+    // fontFamily: "'Black Ops One', sans-serif",
+    fontFamily: "'Lato', sans-serif",
     width: 160,
-    fontSize: "2.4rem",
-    color: grey[700]
+    fontSize: "2.8rem",
+    color: grey[700],
+    color: 'dodgerblue'
   },
   inputContainer: {
     display: "flex",
@@ -47,8 +51,8 @@ const useStyles = makeStyles(theme => ({
     }
   },
   indicator: {
-    backgroundColor: 'tomato',
-    boxShadow: '2px 1px 4px rgba(0, 0, 0, .4)',
+    backgroundColor: "tomato",
+    boxShadow: "2px 1px 4px rgba(0, 0, 0, .4)",
     borderRadius: "7px",
     marginLeft: 5,
     padding: "5px 20px",
@@ -57,25 +61,36 @@ const useStyles = makeStyles(theme => ({
   },
   nr: {
     // color: '#333 !important',
-    backgroundColor: 'seagreen'
+    backgroundColor: "seagreen"
   },
   nrLc: {
-    backgroundColor: 'orange'
+    backgroundColor: "orange"
   },
   custom: {
-    backgroundColor: 'hotpink'
+    backgroundColor: "hotpink"
+  },
+  discountCaption: {
+    marginLeft: "10px"
+  },
+  headers: {
+    // border: '1px solid red',
+    display: 'flex',
+    justifyContent: 'space-around'
+  },
+  finalPrice: {
+    marginLeft: 'px'
   }
-
 }));
 
-const WithLabel = ({ classes, value, children }) => {
-  return (
-    <div className={classes}>
-      {children}
-      <div>{value}</div>
-    </div>
-  );
-};
+// const WithLabel = ({ classes, value, children, id }) => {
+//   console.log(classes)
+//   return (
+//     <div className={classes}>
+//       {children}
+//       <div className={classes.finalPrice}>{value}</div>
+//     </div>
+//   );
+// };
 
 const refFactory = numOfRefs => {
   const arrOfRefs = [];
@@ -127,7 +142,7 @@ const PriceCalculator = props => {
   }, [values, lc, nr, customDiscount]);
 
   const handleChange = index => ({ target: { value } }) => {
-    if (! isNaN(Number(value)) || value === '.') {
+    if (!isNaN(Number(value)) || value === ".") {
       setValues({
         ...values,
         [index]: value
@@ -145,14 +160,13 @@ const PriceCalculator = props => {
 
   const handleNrLc = () => {
     if (nr && lc) {
-      setLc(false)
-      setNr(false)
+      setLc(false);
+      setNr(false);
     } else {
       setNr(true);
       setLc(true);
     }
-    
-  }
+  };
 
   const handleKeyPress = id => ({ key }) => {
     if (key === "Enter") {
@@ -168,7 +182,7 @@ const PriceCalculator = props => {
     setValues([]);
     setCustomDiscount(0);
     setNr(false);
-    setLc(false)
+    setLc(false);
   };
 
   const setDiscountChange = (e, value) => {
@@ -184,16 +198,16 @@ const PriceCalculator = props => {
 
     // TODO: move to child component
     const Indicator = type => {
-      let modifier = '';
+      let modifier = "";
       switch (type) {
-        case 'Nr':
-          modifier = 'nr'
+        case "Nr":
+          modifier = "nr";
           break;
-        case 'Lc':
-          modifier = 'lc'
+        case "Lc":
+          modifier = "lc";
           break;
-        case 'Custom':
-          modifier = 'custom'
+        case "Custom":
+          modifier = "custom";
           break;
       }
 
@@ -203,15 +217,14 @@ const PriceCalculator = props => {
     };
 
     const renderIndicators = () => {
-      
       return (
         <React.Fragment>
-          {lc ? Indicator('Lc') : ''}
-          {nr ? Indicator('Nr') : ''}
-          {customDiscount ? Indicator('Custom') : ''}
-        </React.Fragment>   
-      )
-    }
+          {lc ? Indicator("Lc") : ""}
+          {nr ? Indicator("Nr") : ""}
+          {customDiscount ? Indicator("Custom") : ""}
+        </React.Fragment>
+      );
+    };
 
     let sum = Object.values(prices).reduce((sum, val) => sum + Number(val), 0);
     if (Math.round(sum) !== sum) {
@@ -228,14 +241,20 @@ const PriceCalculator = props => {
   };
 
   const renderInputs = () => {
-    return inputs.map(id => {
+    return (
+      inputs.map(id => {
       let value = prices[id];
       if (prices[id] !== undefined && Math.round(prices[id]) !== prices[id]) {
         value = prices[id].toFixed(3);
       }
 
       return (
-        <WithLabel key={id} classes={classes.inputContainer} value={value}>
+        <WithLabel
+          key={id}
+          id={id}
+          classes={classes.inputContainer}
+          value={value}
+        >
           <PriceInput
             value={
               values[id] === undefined || values[id] === 0 ? "" : values[id]
@@ -248,18 +267,21 @@ const PriceCalculator = props => {
           />
         </WithLabel>
       );
-    });
+    }));
   };
 
   return (
     <div className={classes.root}>
-        <div className={classes.totalOfTotalContainer}>
-          {renderSum()}
-        </div>
+      <div className={classes.totalOfTotalContainer}>{renderSum()}</div>
       <div className={classes.mainContainer}>
-        <div>
-          <div className={classes.inputs}>{renderInputs()}</div>
-        </div>
+        <div className={classes.inputs}>
+          <div className={classes.headers}>
+            <div>Repairs</div>
+            <div>Input price</div>
+            <div>Final Price</div>
+          </div>
+          {renderInputs()}
+          </div>
         <Controls
           handleNr={handleNr}
           handleLc={handleLc}

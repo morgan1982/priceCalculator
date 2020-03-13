@@ -20,14 +20,15 @@ let mainWindow;
 
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 900,
-        height: 600
+        width: 880,
+        height: 612
     })
     mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
     if (isDev) {
         // Open devtools
         mainWindow.webContents.openDevTools();
     }
+    mainWindow.setResizable(false);
     mainWindow.on('closed', () => mainWindow = null);
 }
 

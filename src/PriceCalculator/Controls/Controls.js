@@ -22,6 +22,9 @@ const useStyles = makeStyles(theme => ({
     '& h6': {
       marginRight: theme.spacing(2)
     }
+  },
+  controlTitle: {
+    width: 30
   }
 }))
 
@@ -33,7 +36,9 @@ const Controls = ({handleLc, handleNr, handleNrLc, ...rest}) => {
       <div className={classes.flex}>
         <div className={classes.left}>
           <div className={classes.container}>
-            <Typography variant='subtitle1'>Lc</Typography>
+            <Typography
+              className={classes.controlTitle} 
+              variant='subtitle1'>Lc</Typography>
             <IosSwitch
               disabled={rest.customDiscount}
               onChange={handleLc}
@@ -41,14 +46,16 @@ const Controls = ({handleLc, handleNr, handleNrLc, ...rest}) => {
             />
           </div>
           <div className={classes.container}>
-            <Typography variant='subtitle1'>Nr</Typography>
+            <Typography className={classes.controlTitle} variant='subtitle1'>Nr</Typography>
             <IosSwitch
               onChange={handleNr}
               checked={rest.nr}
             />
           </div>
           <div className={classes.container}>
-            <Typography variant='subtitle1'>Nr/Lc</Typography>
+            <Typography
+              className={classes.controlTitle} 
+              variant='subtitle1'>Nr/Lc</Typography>
             <IosSwitch
               disabled={rest.customDiscount}
               onChange={handleNrLc}
