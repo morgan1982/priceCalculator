@@ -12,7 +12,7 @@
   "build": {
     "appId": "com.my-website.my-app",
     "productName": "Discount-Calculator",
-    "copyright": "Copyright © 2020 ${killerWhale}",
+    "copyright": "Copyright © 2020 killerwhale",
     "mac": {
       "category": "public.app-category.utilities"
     },
@@ -22,6 +22,10 @@
     ],
     "directories": {
       "buildResources": "assets"
+    },
+    "win": {
+      "icon": "build/pig.ico",
+      "target": "NSIS"
     }
   },
   "dependencies": {
@@ -34,16 +38,19 @@
     "lodash": "^4.17.15",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
-    "react-scripts": "3.4.0"
+    "react-scripts": "3.4.0",
+    "update-electron-app": "^1.5.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron . \"",
+    "electron-dev": "concurrently \"set BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron . \"",
+    "electron-dev-win": "concurrently \"yarn start\" \"wait-on http://localhost:3000 && electron . \"",
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "yarn build",
     "electron-pack": "electron-builder build -mw",
-    "build-arch": "electron-builder"
+    "build-arch": "electron-builder -mw",
+    "dist": "electron-builder"
   },
   "eslintConfig": {
     "extends": "react-app"

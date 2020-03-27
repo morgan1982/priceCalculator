@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles(theme => ({
   root: {
+    backgroundColor: '#222',
     width: 400,
     padding: '0px 40px'
   },
@@ -25,13 +26,14 @@ const useStyles = makeStyles(theme => ({
   },
   controlTitle: {
     width: 30
+    
   }
 }))
 
 const Controls = ({handleLc, handleNr, handleNrLc, ...rest}) => {
   const classes = useStyles();
   return (
-    <Paper className={classes.root}>
+    <Paper className={classes.root} elevation={15}>
       <Typography variant='h6' gutterBottom>Controls</Typography>
       <div className={classes.flex}>
         <div className={classes.left}>
@@ -62,6 +64,41 @@ const Controls = ({handleLc, handleNr, handleNrLc, ...rest}) => {
               checked={rest.nr && rest.lc}
             />
           </div>
+        </div>
+
+        <div className={classes.secondPanel}>
+          <div className={classes.container}>
+            <Typography
+              className={classes.controlTitle} 
+              variant='subtitle1'>25%</Typography>
+            <IosSwitch
+              disabled={rest.customDiscount}
+              onChange={rest.handleLabDisc('25')}
+              checked={rest.labDisc['25']}
+            />
+          </div>
+
+          <div className={classes.container}>
+            <Typography
+              className={classes.controlTitle} 
+              variant='subtitle1'>40%</Typography>
+            <IosSwitch
+              disabled={rest.customDiscount}
+              onChange={rest.handleLabDisc('40')}
+              checked={rest.labDisc['40']}
+            />
+          </div>
+
+          <div className={classes.container}>
+            <Typography
+              className={classes.controlTitle} 
+              variant='subtitle1'>+Vat</Typography>
+            <IosSwitch
+              onChange={rest.handleAddVat}
+              checked={rest.addVat}
+            />
+          </div>
+          
         </div>
         <div className={classes.right}>
           <Button

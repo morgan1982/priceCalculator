@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: '#333'
   },
   track: {
-    backgroundColor: 'red'
+    // backgroundColor: 'red'
   },
   sliderRoot: {
     backgroundColor: '#333'

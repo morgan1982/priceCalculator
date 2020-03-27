@@ -6,7 +6,7 @@ import * as serviceWorker from './serviceWorker';
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline'
-import { deepOrange, red } from '@material-ui/core/colors'
+import { deepOrange, red, blue, lime } from '@material-ui/core/colors'
 
 const theme = createMuiTheme({
   typography: {
@@ -14,7 +14,7 @@ const theme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: deepOrange[500]
+      main: lime[400]
     },
     secondary: {
       main: red[900]
@@ -67,7 +67,8 @@ const theme = createMuiTheme({
   overrides: {
     MuiTypography: {
       root: {
-        color: '#666'
+        color: '#ddd'
+        // color: '#666'
       }
     }
   }
