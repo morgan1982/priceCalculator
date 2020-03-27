@@ -7,6 +7,9 @@ const Menu = electron.Menu;
 const path = require('path');
 const isDev = require('electron-is-dev');
 
+require('update-electron-app')({
+    repo: 'https://github.com/morgan1982/priceCalculator',
+}) 
 
 
 contextMenu({
