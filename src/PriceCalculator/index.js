@@ -313,7 +313,7 @@ const PriceCalculator = props => {
           <Typography variant="h4">
             Dis<span style={{ color: "darkorange" }}>Calc</span>
           </Typography>
-          <Typography variant="subtitle1">v 0.02</Typography>
+          <Typography variant="subtitle1">v 0.03</Typography>
         </div>
         <div>{renderSum()}</div>
       </div>
